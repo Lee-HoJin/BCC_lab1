@@ -14,14 +14,9 @@ void raise_alarm(unsigned long found, unsigned long expected) {
 }
 
 void *frame;
-unsigned long expected = 0;
-unsigned long found = 0;
-
 
 void print_secret() {
-	frame = __builtin_frame_address(0);
-	found = frame;
-    printf("Ah! %s\n",secret);
+	printf("Ah! %s\n",secret);
     exit(0);
 }
 
@@ -41,21 +36,14 @@ void dump_frame(void* frame) {
 void receive_input() {
     char buf[128];
     frame = __builtin_frame_address(0);
+ 	unsigned long found = frame;
     dump_frame(frame);
- 
-    expected = frame;
-
-	if (found != 0) raise_alarm(found, expected);
-
-    frame = __builtin_frame_address(0);
-    found = frame;
+ //	frame = __builtin_frame_address(0);
+	unsigned long expected = frame;
 
     fgets(buffer, 256, stdin);
     strcpy(buf, buffer);
 
-    dump_frame(frame);
-    frame =  __builtin_frame_address(0);
-    found = frame;
     if (expected != found) raise_alarm(found, expected);
 }
 
